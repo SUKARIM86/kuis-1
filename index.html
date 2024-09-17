@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Tes Gambar dan Teks</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Kuis Bergambar dan Teks</h1>
+        <div id="quiz-container">
+            <!-- Soal akan ditampilkan di sini -->
+            <div id="question-container">
+                <p id="question"></p>
+                <img id="question-image" class="question-image" alt="Gambar Soal">
+                <div id="options">
+                    <!-- Pilihan jawaban -->
+                </div>
+            </div>
+            <button id="next-btn" onclick="nextQuestion()">Next</button>
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

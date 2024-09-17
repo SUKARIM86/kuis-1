@@ -1,90 +1,72 @@
 const quizData = [
-    {
-        question: "Gambar apa ini?",
-        image: "gambar1.jpg",  // Gambar pertama
-        options: ["Kucing", "Anjing", "Burung", "Ikan"],
-        correct: "Kucing"
-    },
-    {
-        question: "Siapa Nama Nabi Terakhir?",
-        
-        options: ["Adam", "Nuh", "Isa", "Muhamad"],
-        correct: "Muhamad"
-    },
-    {
-        question: "Gambar apa ini?",
-        image: "gambar3.jpg",  // Gambar ketiga
-        options: ["Mobil", "Sepeda", "Motor", "Pesawat"],
-        correct: "Mobil"
-    }
-    // Tambahkan soal lain sesuai kebutuhan
+  {
+    question: "Apa nama hewan ini?",
+    image: "https://via.placeholder.com/300?text=Gambar+Hewan+1",  // Gambar hewan 1
+    options: ["Kucing", "Anjing", "Gajah", "Kuda"],
+    correct: 0
+  },
+  {
+    question: "Apa nama benda ini?",
+    image: "https://via.placeholder.com/300?text=Gambar+Benda+1",  // Gambar benda 1
+    options: ["Bola", "Piring", "Kursi", "Meja"],
+    correct: 1
+  },
+  {
+    question: "Apa nama tempat ini?",
+    image: "https://via.placeholder.com/300?text=Gambar+Tempat+1",  // Gambar tempat 1
+    options: ["Sekolah", "Rumah Sakit", "Bandara", "Kantor"],
+    correct: 2
+  },
+  // Tambahkan soal lainnya hingga 15 soal
 ];
 
-let currentQuestionIndex = 0;
-let score = 0;
+let currentQuestion = 0;
 
-const questionElement = document.getElementById("question");
-const imageElement = document.getElementById("question-image");
-const optionsContainer = document.getElementById("options");
-const nextButton = document.getElementById("next-btn");
-const resultElement = document.getElementById("result");
+const quiz = document.getElementById('quiz');
+const nextButton = document.getElementById('next-btn');
 
-// Menampilkan soal pertama
 function loadQuestion() {
-    const currentQuestion = quizData[currentQuestionIndex];
-    questionElement.textContent = currentQuestion.question;
-    imageElement.src = currentQuestion.image;
-    optionsContainer.innerHTML = "";
+  const currentQuizData = quizData[currentQuestion];
 
-    currentQuestion.options.forEach(option => {
-        const optionButton = document.createElement("input");
-        optionButton.type = "radio";
-        optionButton.name = "option";
-        optionButton.value = option;
-        optionButton.id = option;
-        const label = document.createElement("label");
-        label.setAttribute("for", option);
-        label.textContent = option;
+  quiz.innerHTML = `
+    <div class="question">${currentQuizData.question}</div>
+    <div class="image-container">
+      <img src="${currentQuizData.image}" alt="Gambar Soal">
+    </div>
+    <ul class="options">
+      ${currentQuizData.options.map((option, index) =>
+        `<li onclick="selectAnswer(${index})">${option}</li>`
+      ).join('')}
+    </ul>
+  `;
 
-        optionsContainer.appendChild(optionButton);
-        optionsContainer.appendChild(label);
-        optionsContainer.appendChild(document.createElement("br"));
-    });
+  nextButton.disabled = true;
 }
 
-// Melanjutkan ke soal berikutnya
-function nextQuestion() {
-    // Cek apakah jawaban dipilih
-    const selectedOption = document.querySelector('input[name="option"]:checked');
-    if (!selectedOption) {
-        alert("Pilih jawaban dulu!");
-        return;
-    }
+function selectAnswer(selectedIndex) {
+  const currentQuizData = quizData[currentQuestion];
+  const options = document.querySelectorAll('.options li');
 
-    // Cek apakah jawaban benar
-    if (selectedOption.value === quizData[currentQuestionIndex].correct) {
-        score++;
-    }
-
-    currentQuestionIndex++;
-
-    // Jika masih ada soal
-    if (currentQuestionIndex < quizData.length) {
-        loadQuestion();
+  options.forEach((option, index) => {
+    if (index === currentQuizData.correct) {
+      option.style.backgroundColor = 'lightgreen';
     } else {
-        // Jika tidak ada soal lagi, tampilkan hasil
-        showResult();
+      option.style.backgroundColor = '#f9f9f9';
     }
+  });
+
+  nextButton.disabled = false;
 }
 
-function showResult() {
-    questionElement.style.display = "none";
-    imageElement.style.display = "none";
-    optionsContainer.style.display = "none";
-    nextButton.style.display = "none";
+nextButton.addEventListener('click', () => {
+  currentQuestion++;
 
-    resultElement.textContent = `Kamu menjawab benar ${score} dari ${quizData.length} soal.`;
-}
+  if (currentQuestion < quizData.length) {
+    loadQuestion();
+  } else {
+    quiz.innerHTML = "<h2>Kuis selesai! Terima kasih telah mengikuti.</h2>";
+    nextButton.style.display = 'none';
+  }
+});
 
-// Memuat soal pertama saat halaman dibuka
 loadQuestion();
